@@ -444,8 +444,12 @@ function SenderIdentity({ email, compact = false }: { email: Email; compact?: bo
           .join("")}
       </div>
       <div className="min-w-0 flex-1">
-        <div className="mail-reader-meta truncate text-[12px] font-semibold leading-4 text-foreground/92">{email.from}</div>
-        <div className="mail-reader-meta truncate text-[9.5px] leading-3 text-muted-foreground/80">{email.email}</div>
+        <div className="mail-reader-meta truncate text-[12px] font-semibold leading-4 text-foreground/92">
+          {email.from}
+        </div>
+        <div className="mail-reader-meta truncate text-[9.5px] leading-3 text-muted-foreground/80">
+          {email.email}
+        </div>
       </div>
     </div>
   );
@@ -484,10 +488,7 @@ function ReaderBody({ body }: { body: string }) {
         }
 
         return (
-          <dl
-            key={index}
-            className="glass-tile not-italic rounded-lg p-3"
-          >
+          <dl key={index} className="glass-tile not-italic rounded-lg p-3">
             {block.fields.map((field) => (
               <div
                 key={field.label}
