@@ -3,13 +3,28 @@ import { useState } from "react";
 import type { MailEvent } from "../types";
 import "../styles.css";
 
-export function EventMailCard({ event }: { event: MailEvent }) {
+export function EventMailCard({
+  event,
+  onAdd,
+}: {
+  event: MailEvent;
+  onAdd?: (event: MailEvent) => void;
+}) {
+  const [view, setView] = useState<"event" | "monthly">("event");
+  const [added, setAdded] = useState(false);
   return (
     <div className="event-mail-hero relative mb-6 mt-7 h-[220px] max-w-[480px] overflow-hidden rounded-2xl border border-white/[0.09] shadow-[0_24px_72px_-42px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.12)] xl:max-w-[520px]">
       <div className="event-mail-ridges" />
       <div className="event-calendar-card absolute left-[55%] top-1/2 z-10 w-[min(260px,calc(100%-1.5rem))] -translate-x-1/2 -translate-y-1/2 rounded-[20px] border border-white/[0.13] p-3.5 text-foreground shadow-[0_28px_70px_-36px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(255,255,255,0.16)]">
         <div className="mail-reader-meta flex items-center gap-2 text-[10px] text-muted-foreground">
-          <button className="rounded-md border border-white/[0.13] bg-white/70 px-4 py-1.5 font-medium text-background">
+          <button
+            onClick={() => setView("event")}
+            className={
+              view === "event"
+                ? "rounded-md border border-white/[0.13] bg-white/70 px-4 py-1.5 font-medium text-background"
+                : "rounded-md px-3 py-1.5 transition hover:bg-white/[0.06] hover:text-foreground"
+            }
+          >
             {event.cadence}
           </button>
           <button className="rounded-md px-3 py-1.5 transition hover:bg-white/[0.06] hover:text-foreground">Monthly</button>
