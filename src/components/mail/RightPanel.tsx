@@ -102,15 +102,14 @@ export function RightPanel({
             >
               <span className="h-8 w-1 rounded-full" style={{ background: event.color }} />
               <div className="flex-1">
-                <div className="text-[11px] tabular-nums text-muted-foreground">{e.t}</div>
-                <div className="text-xs text-foreground">{e.title}</div>
+                <div className="text-[11px] tabular-nums text-muted-foreground">{event.t}</div>
+                <div className="text-xs text-foreground">{event.title}</div>
               </div>
             </li>
           ))}
         </ul>
       </Card>
 
-      {/* Attachments */}
       {email?.attachments?.length ? (
         <Card>
           <SectionHeader icon={Paperclip} title="Attachments" />
