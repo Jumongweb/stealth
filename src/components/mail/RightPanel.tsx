@@ -132,14 +132,19 @@ export function RightPanel({
         </Card>
       ) : null}
 
-      {/* Contact */}
       {email && (
         <Card>
           <SectionHeader icon={User} title="Contact" />
           <div className="mt-3 flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-full text-xs font-medium text-white/90"
-                 style={{ background: `linear-gradient(135deg, ${email.avatarColor}, #1a1a1d)` }}>
-              {email.from.split(" ").map(n => n[0]).slice(0,2).join("")}
+            <div
+              className="grid h-10 w-10 place-items-center rounded-full text-xs font-medium text-white/90"
+              style={{ background: `linear-gradient(135deg, ${email.avatarColor}, #1a1a1d)` }}
+            >
+              {email.from
+                .split(" ")
+                .map((name) => name[0])
+                .slice(0, 2)
+                .join("")}
             </div>
             <div className="min-w-0">
               <div className="truncate text-sm text-foreground">{email.from}</div>
