@@ -1,0 +1,58 @@
+import type { MailboxPolicy, Postage, Receipt, SenderRule } from "./domain";
+import type { ApiRepository } from "./repository";
+
+function key(owner: string, sender: string) {
+  return `${owner}:${sender}`;
+}
+
+export class MemoryApiRepository implements ApiRepository {
+  private readonly policies = new Map<string, MailboxPolicy>();
+  private readonly postage = new Map<string, Postage>();
+  private readonly receipts = new Map<string, Receipt>();
+  private readonly senderRules = new Map<string, SenderRule>();
+
+  async getPolicy(owner: string) {
+    return structuredClone(this.policies.get(owner) ?? null);
+  }
+
+  async setPolicy(owner: string, policy: MailboxPolicy) {
+    this.policies.set(owner, structuredClone(policy));
+    return structuredClone(policy);
+  }
+
+  async getSenderRule(owner: string, sender: string) {
+    return this.senderRules.get(key(owner, sender)) ?? "default";
+  }
+
+  async setSenderRule(owner: string, sender: string, rule: SenderRule) {
+    const ruleKey = key(owner, sender);
+    if (rule === "default") this.senderRules.delete(ruleKey);
+    else this.senderRules.set(ruleKey, rule);
+    return rule;
+  }
+
+  async getPostage(messageId: string) {
+    return structuredClone(this.postage.get(messageId) ?? null);
+  }
+
+  async setPostage(postage: Postage) {
+    this.postage.set(postage.messageId, structuredClone(postage));
+    return structuredClone(postage);
+  }
+
+  async getReceipt(messageId: string) {
+    return structuredClone(this.receipts.get(messageId) ?? null);
+  }
+
+  async setReceipt(receipt: Receipt) {
+    this.receipts.set(receipt.messageId, structuredClone(receipt));
+    return structuredClone(receipt);
+  }
+
+  reset() {
+    this.policies.clear();
+    this.postage.clear();
+    this.receipts.clear();
+    this.senderRules.clear();
+  }
+}
