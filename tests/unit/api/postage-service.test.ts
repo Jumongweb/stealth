@@ -120,4 +120,21 @@ describe("postage service", () => {
       status: 409,
     });
   });
+
+  it("marks rejected postage for refund", async () => {
+    const repository = new MemoryApiRepository();
+    await repository.setPostage({
+      amount: "100",
+      createdAt: "2026-06-14T12:00:00.000Z",
+      messageId: "c".repeat(64),
+      paymentHash: "d".repeat(64),
+      recipient,
+      sender,
+      status: "pending",
+    });
+
+    await expect(resolvePostage(repository, "c".repeat(64), "refunded")).resolves.toMatchObject({
+      status: "refunded",
+    });
+  });
 });
