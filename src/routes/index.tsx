@@ -9,6 +9,7 @@ import { Compose, type ComposeSubmission } from "@/components/mail/Compose";
 import { RightPanel, type ContextAction } from "@/components/mail/RightPanel";
 import { CommandPalette } from "@/components/mail/CommandPalette";
 import { SettingsModal } from "@/components/mail/SettingsModal";
+import { AttachmentPreviewDrawer } from "@/components/mail/AttachmentPreviewDrawer";
 import {
   defaultMailFilters,
   emails as initialEmails,
@@ -66,6 +67,11 @@ function MailApp() {
   const [calendarCreateRequest, setCalendarCreateRequest] = useState(0);
   const { preferences, setPreferences, hydrated } = usePreferences();
   const senderConversion = useSenderConversion();
+  const [previewAttachment, setPreviewAttachment] = useState<{
+    name: string;
+    size: string;
+    type: string;
+  } | null>(null);
 
   // Gate: show onboarding only after localStorage has been read (hydrated) and only
   // when it has not been completed in a previous session.
@@ -210,6 +216,8 @@ function MailApp() {
     },
     onCalendarResponseChange: calendar.updateResponse,
     onCalendarReminderChange: calendar.updateReminder,
+    onPreviewAttachment: (attachment: { name: string; size: string; type: string }) =>
+      setPreviewAttachment(attachment),
   };
 
   const handleContextAction = (action: ContextAction, email: Email) => {
@@ -377,6 +385,7 @@ function MailApp() {
                   body: `${prompt}\n\nDrafted response:\nThanks for the note. I reviewed the context and will follow up with the next step shortly.${quoteBody(email)}`,
                 })
               }
+              onPreviewAttachment={(attachment) => setPreviewAttachment(attachment)}
             />
           </div>
         </div>
@@ -446,6 +455,13 @@ function MailApp() {
         target={senderConversion.target}
         onConfirm={handleConvertSender}
         onClose={senderConversion.close}
+      />
+
+      <AttachmentPreviewDrawer
+        isOpen={!!previewAttachment}
+        onClose={() => setPreviewAttachment(null)}
+        attachment={previewAttachment}
+        senderAddress={selected?.email}
       />
     </div>
   );
